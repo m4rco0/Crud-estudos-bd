@@ -48,7 +48,8 @@ poetry shell
 ```
 3. Executando a API
 ```Bash
-fastapi dev loja_db/app.py
+task run
 ```
 
 Acesse a documentação interavia em: http://127.0.0.1:8000/docs
+
