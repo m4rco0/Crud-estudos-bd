@@ -44,12 +44,12 @@ DATABASE_URL="postgresql+psycopg2://USUARIO:SENHA@HOST:PORTA/BANCO"
 2. Configurar o ambiente com Poetry
 ```Bash
 poetry install
-poetry shell
 ```
 3. Executando a API
 ```Bash
-task run
+poetry run task run
 ```
 
 Acesse a documentação interavia em: http://127.0.0.1:8000/docs
+
 
