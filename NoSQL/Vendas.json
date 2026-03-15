@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "_id",
+    "cliente",
+    "dataVenda",
+    "endereco_entrega",
+    "itens",
+    "loja_id",
+    "pagamento",
+    "valor_total"
+  ],
+  "properties": {
+    "_id": {
+      "$ref": "#/$defs/ObjectId"
+    },
+    "cliente": {
+      "type": "object",
+      "required": [
+        "cliente_id",
+        "email",
+        "nome"
+      ],
+      "properties": {
+        "cliente_id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "nome": {
+          "type": "string"
+        }
+      }
+    },
+    "dataVenda": {
+      "type": "string"
+    },
+    "endereco_entrega": {
+      "type": "object",
+      "required": [
+        "numero",
+        "rua"
+      ],
+      "properties": {
+        "numero": {
+          "type": "string"
+        },
+        "rua": {
+          "type": "string"
+        }
+      }
+    },
+    "itens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "nome",
+          "preco_unitario",
+          "produto_id",
+          "quantidade"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "preco_unitario": {
+            "type": "integer"
+          },
+          "produto_id": {
+            "type": "string"
+          },
+          "quantidade": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "loja_id": {
+      "type": "string"
+    },
+    "pagamento": {
+      "type": "object",
+      "required": [
+        "detalhes",
+        "metodo",
+        "status"
+      ],
+      "properties": {
+        "detalhes": {
+          "type": "object",
+          "required": [
+            "chave_pix",
+            "comprovante"
+          ],
+          "properties": {
+            "chave_pix": {
+              "type": "string"
+            },
+            "comprovante": {
+              "type": "string"
+            }
+          }
+        },
+        "metodo": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "valor_total": {
+      "type": "integer"
+    }
+  },
+  "$defs": {
+    "ObjectId": {
+      "type": "object",
+      "properties": {
+        "$oid": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{24}$"
+        }
+      },
+      "required": [
+        "$oid"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
