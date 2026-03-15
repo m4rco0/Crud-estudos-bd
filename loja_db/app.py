@@ -7,7 +7,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from loja_db.database import get_session
-from loja_db.models import Cliente, Estoque, Lojas, Produto
+from loja_db.models import Cliente, Estoque, Lojas, Produto, Item_Venda
 from loja_db.schemas import (
     ClienteList,
     ClienteSchema,
@@ -432,3 +432,13 @@ def delete_estoque(
     session.delete(db_estoque)
 
     session.commit()
+
+@app.get('/items/', status_code=HTTPStatus.OK)
+def read_items(
+               session: Session = Depends(get_session)
+               ):
+    items_db = session.scalars(
+        select(Item_Venda)
+    ).all()
+
+    return {'items': items_db}
