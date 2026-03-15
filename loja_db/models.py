@@ -45,7 +45,7 @@ class Produto(Base):
 
     idProduto: Mapped[int] = mapped_column('idproduto', primary_key=True, autoincrement=True)
     nome: Mapped[str] = mapped_column(String(45))
-    preco: Mapped[Decimal] = mapped_column('preço')
+    preco: Mapped[Decimal] = mapped_column('preco', DECIMAL(10,2))
 
     estoque: Mapped['Estoque'] = relationship(
         'Estoque', back_populates='produto', uselist=False, cascade="all, delete-orphan"
@@ -66,4 +66,18 @@ class Estoque(Base):
 
     produto: Mapped['Produto'] = relationship(
         'Produto', back_populates='estoque'
+    )
+
+class Item_Venda(Base):
+    __tablename__ = 'item_venda'
+    __table_args__ = {'schema': 'db_loja'}
+
+    id_item: Mapped[int] = mapped_column('iditem', primary_key=True, autoincrement=True)
+    id_produto: Mapped[int] = mapped_column(
+        'produto_idproduto',
+        ForeignKey('db_loja.produto.idproduto')
+    )
+    id_lojas: Mapped[int] = mapped_column(
+        'idlojas',
+        ForeignKey('db_loja.lojas.idlojas')
     )
