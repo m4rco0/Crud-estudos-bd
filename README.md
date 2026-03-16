@@ -38,7 +38,7 @@ cd loja-db
 ```
 # --- Template de configuração (Copie para .env e preencha) ---
 
-DATABASE_URL="postgresql+psycopg2://USUARIO:SENHA@HOST:PORTA/BANCO"
+DATABASE_URL="postgresql+psycopg2://USUARIO:SENHA@HOST:PORTA/postgres"
 ```
 
 2. Configurar o ambiente com Poetry
