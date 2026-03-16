@@ -4,7 +4,7 @@ Schemas de tabelas usados para fazer a API
 
 from decimal import Decimal
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 
 class Message(BaseModel):
@@ -74,7 +74,14 @@ class EstoqueSchema(BaseModel):
 class EstoquePublic(EstoqueSchema):
     id_produto: int
 
+# -------- Esquema de items
+class ItemSchema(BaseModel):
+    id_produto: int
+    id_loja: int
 
+class ItemPublic(ItemSchema):
+    id_item: int
+    model_config = ConfigDict(from_attributes=True)
 # -------- Esquema em listas ---------
 class LojasList(BaseModel):
     lojas: list[PublicLojas]
@@ -86,3 +93,6 @@ class ProdutoList(BaseModel):
 
 class ClienteList(BaseModel):
     clientes: list[PublicClient]
+
+class ItemsList(BaseModel):
+    items: list[ItemPublic]

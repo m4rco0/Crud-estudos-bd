@@ -18,6 +18,9 @@ from loja_db.schemas import (
     ProdutoSchema,
     PublicClient,
     PublicLojas,
+    ItemPublic,
+    ItemSchema,
+    ItemsList
 )
 
 app = FastAPI()
@@ -413,7 +416,7 @@ def update_estoque(
 
 @app.delete(
         '/estoque/{produto_id}',
-        status_code=HTTPStatus.NO_CONTENT
+        status_code=HTTPStatus.NO_CONTENT,
         )
 def delete_estoque(
         produto_id: int,
@@ -433,7 +436,10 @@ def delete_estoque(
 
     session.commit()
 
-@app.get('/items/', status_code=HTTPStatus.OK)
+@app.get(
+    '/items/', 
+    status_code=HTTPStatus.OK
+    )
 def read_items(
                session: Session = Depends(get_session)
                ):
@@ -441,4 +447,100 @@ def read_items(
         select(Item_Venda)
     ).all()
 
+
     return {'items': items_db}
+
+@app.get(
+    '/items/{item_id}', 
+    status_code=HTTPStatus.OK
+    )
+def read_item(
+    item_id: int,
+    session: Session = Depends(get_session)
+):
+    item_db = session.scalar(
+        select(Item_Venda).where(
+            item_id == Item_Venda.id_item
+            )
+    )
+
+    if item_db is None:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail='Item id não existe!'
+        )
+    
+    return item_db
+
+@app.put(
+    '/items/{id_item}', 
+    status_code=HTTPStatus.OK
+    )
+@app.put(
+    '/items/{id_item}', 
+    status_code=HTTPStatus.OK,
+    response_model=ItemPublic  # Adicione o response_model para evitar erros de validação na saída
+)
+def update_item(
+    id_item: int,
+    item_venda: ItemSchema, # Use o schema de entrada
+    session: Session = Depends(get_session)
+):
+    db_item = session.scalar(
+        select(Item_Venda).where(Item_Venda.id_item == id_item)
+    )
+
+    if not db_item:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail='Item de venda não encontrado!'
+        )
+    
+    loja_existe = session.scalar(
+        select(Lojas).where(Lojas.idlojas == item_venda.id_loja)
+    )
+    if not loja_existe:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail=f'A loja com ID {item_venda.id_loja} não existe.'
+        )
+    
+    produto_existe = session.scalar(
+        select(Produto).where(Produto.idProduto == item_venda.id_produto)
+    )
+    if not produto_existe:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail=f'O produto com ID {item_venda.id_produto} não existe.'
+        )
+    
+    db_item.id_loja = item_venda.id_loja
+    db_item.id_produto = item_venda.id_produto
+
+    session.add(db_item)
+    session.commit()
+    session.refresh(db_item)
+
+    return db_item
+
+
+@app.delete(
+    '/items/{id_item}',
+    status_code=HTTPStatus.NO_CONTENT
+)
+def delete_item(
+    id_item: int,
+    session: Session = Depends(get_session)
+):
+    db_item = session.scalar(
+        select(Item_Venda).where(Item_Venda.id_item == id_item)
+    )
+
+    if db_item is None:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail='ID_ITEM não está no banco de dados'
+        )
+    
+    session.delete(db_item)
+    session.commit()
