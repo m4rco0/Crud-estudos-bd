@@ -37,8 +37,12 @@ cd loja-db
 2. Criando .env
 ```
 # --- Template de configuração (Copie para .env e preencha) ---
-
-DATABASE_URL="postgresql+psycopg2://USUARIO:SENHA@HOST:PORTA/postgres"
+DB_USER=""
+DB_PASSWD=""
+RDS_ENDPOINT=""
+RDS_PORT=5432
+DB_NAME="postgres"
+DATABASE_URL="postgresql+psycopg2://${DB_USER}:${DB_PASSWD}@${RDS_ENDPOINT}:${RDS_PORT}/${DB_NAME}"
 ```
 
 2. Configurar o ambiente com Poetry
