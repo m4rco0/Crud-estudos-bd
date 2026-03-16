@@ -51,7 +51,9 @@ poetry install
 ```
 3. Executando a API
 ```Bash
-poetry run task run
+poetry run task run     # Rodar o backend
+poetry run task lint    # Verificar a syntax
+poetry run task test    # Executar testes unitarios
 ```
 
 Acesse a documentação interavia em: http://127.0.0.1:8000/docs
